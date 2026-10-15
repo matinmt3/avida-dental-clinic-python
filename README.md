@@ -59,7 +59,7 @@ node tests/test_frontend.cjs
 
 The suite contains **12 backend HTTP/SQLite regressions** and **18 frontend regressions**. Backend tests create temporary, isolated databases and start an ephemeral loopback server. Frontend tests use Node's built-in modules and a controlled DOM/API harness; they are not a substitute for browser or accessibility certification.
 
-Coverage includes booking conflicts, invalid dates, expired sessions, recovery-token expiry, access control, guest-data isolation, rescheduling, validation, deep-link navigation, duplicate submissions, stale responses and animation cleanup. GitHub Actions runs the same commands with Python 3.12 and Node.js 22. No deployment job is configured.
+Coverage includes booking conflicts, invalid dates, expired sessions, recovery-token expiry, access control, guest-data isolation, rescheduling, validation, deep-link navigation, duplicate submissions, stale responses and animation cleanup. The included GitHub Actions workflow is configured to run the same commands with Python 3.12 and Node.js 22; no hosted CI result or deployment is claimed. See [local validation](VALIDATION.md) for the actual results and their scope.
 
 ## Project structure
 
