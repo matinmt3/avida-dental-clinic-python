@@ -1,0 +1,1558 @@
+/* ==========================================================================
+   سیستم طراحی اختصاصی «مطب دندان‌پزشکی آویدا» (Avida Dental Clinic)
+   چیدمان راست‌به‌چپ (RTL)، پالت سفید پاک، سبز کلینیکال، مشکی زغالی و قرمز مرجانی
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('/static/fonts/Vazirmatn-Variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* پالت رنگ اصلی: سفید، سبز کلینیکال، مشکی/خاکستری تیره و قرمز مرجانی */
+  --bg-page: #F7FAF9;
+  --bg-surface: #FFFFFF;
+  --bg-mint-soft: #ECFDF5;
+  --bg-teal-soft: #F0FDFA;
+  --bg-dark-stage: #09151B;
+  --bg-dark-card: #10232C;
+
+  --green-900: #064E3B;
+  --green-800: #065F46;
+  --green-700: #047857; /* کنتراست بالا برای دکمه‌ها و لینک‌ها (WCAG AA+) */
+  --green-600: #059669;
+  --green-500: #10B981;
+  --green-400: #34D399;
+  --green-100: #D1FAE5;
+
+  --ink-950: #0A0F14;
+  --ink-900: #0F172A;
+  --ink-800: #1E293B;
+  --ink-700: #334155;
+  --ink-600: #475569;
+  --ink-400: #94A3B8;
+
+  /* قرمز مرجانی برای تأکیدهای هدفمند، وضعیت فوری و هشدارهای مهم */
+  --coral-700: #BE123C;
+  --coral-600: #E11D48;
+  --coral-500: #F43F5E;
+  --coral-100: #FFE4E6;
+  --coral-50: #FFF1F2;
+
+  --amber-700: #B45309;
+  --amber-100: #FEF3C7;
+
+  --border-subtle: #E2E8F0;
+  --border-green: #A7F3D0;
+
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-pill: 9999px;
+
+  --shadow-sm: 0 4px 12px -2px rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 12px 28px -6px rgba(6, 78, 59, 0.08), 0 4px 10px -2px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 24px 48px -12px rgba(6, 78, 59, 0.14), 0 8px 16px -4px rgba(15, 23, 42, 0.06);
+  --shadow-3d: 0 28px 60px -15px rgba(9, 21, 27, 0.22);
+
+  --transition-fast: 180ms cubic-bezier(0.22, 1, 0.36, 1);
+  --transition-smooth: 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  direction: rtl;
+  lang: fa;
+  scroll-behavior: smooth;
+  font-size: 16px;
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+body {
+  font-family: 'Vazirmatn', Tahoma, sans-serif;
+  font-weight: 400;
+  background-color: var(--bg-page);
+  color: var(--ink-900);
+  line-height: 1.9;
+  overflow-x: hidden;
+  max-width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6, .font-display {
+  font-family: 'Vazirmatn', Tahoma, sans-serif;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--ink-950);
+  letter-spacing: normal;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: inherit;
+}
+
+/* دسترس‌پذیری و تمرکز صفحه‌کلید */
+:focus-visible {
+  outline: 3px solid var(--green-600) !important;
+  outline-offset: 3px !important;
+}
+
+.skip-link {
+  position: fixed;
+  top: -100px;
+  right: 1.5rem;
+  z-index: 9999;
+  background: var(--ink-950);
+  color: #FFFFFF;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  box-shadow: var(--shadow-lg);
+  transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* کانتینر استاندارد */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+/* نوار اعلان آزمایشی بالای صفحه */
+.top-demo-bar {
+  background: var(--ink-950);
+  color: #F8FAFC;
+  font-size: 0.85rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(52, 211, 153, 0.22);
+}
+
+.top-demo-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.demo-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(225, 29, 72, 0.22);
+  color: #FDA4AF;
+  border: 1px solid rgba(244, 63, 94, 0.45);
+  padding: 0.15rem 0.65rem;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  font-size: 0.78rem;
+}
+
+.top-quick-links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.top-quick-links button, .top-quick-links a {
+  background: transparent;
+  border: none;
+  color: #A7F3D0;
+  cursor: pointer;
+  font-size: 0.82rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.top-quick-links button:hover, .top-quick-links a:hover {
+  color: #FFFFFF;
+  text-decoration: underline;
+}
+
+/* هدر و ناوبری اصلی */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-subtle);
+  transition: box-shadow var(--transition-fast);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 76px;
+  gap: 1rem;
+}
+
+.brand-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.brand-emblem {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--green-800) 0%, var(--green-600) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  box-shadow: 0 8px 20px -4px rgba(5, 150, 105, 0.45);
+  flex-shrink: 0;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-title {
+  font-family: 'Vazirmatn', Tahoma, sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--ink-950);
+  line-height: 1.45;
+}
+
+.brand-subtitle {
+  font-size: 0.76rem;
+  color: var(--green-800);
+  font-weight: 500;
+}
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.nav-link {
+  padding: 0.55rem 0.9rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.93rem;
+  color: var(--ink-800);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.nav-link:hover {
+  background: var(--bg-mint-soft);
+  color: var(--green-800);
+}
+
+.nav-link.active {
+  background: var(--green-800);
+  color: #FFFFFF;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.mobile-menu-btn {
+  display: none;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+  color: var(--ink-900);
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* دکمه‌های استاندارد با لمس حداقل ۴۴ پیکسل */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 46px;
+  padding: 0.65rem 1.35rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--green-800) 0%, var(--green-700) 100%);
+  color: #FFFFFF;
+  box-shadow: 0 10px 24px -6px rgba(4, 120, 87, 0.45);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--green-900) 0%, var(--green-800) 100%);
+  box-shadow: 0 14px 28px -6px rgba(4, 120, 87, 0.55);
+  transform: translateY(-2px);
+}
+
+.btn-coral {
+  background: linear-gradient(135deg, var(--coral-700) 0%, var(--coral-600) 100%);
+  color: #FFFFFF;
+  box-shadow: 0 10px 24px -6px rgba(190, 18, 60, 0.4);
+}
+
+.btn-coral:hover {
+  background: var(--coral-700);
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  background: var(--bg-surface);
+  color: var(--ink-900);
+  border-color: var(--border-subtle);
+}
+
+.btn-outline:hover {
+  border-color: var(--green-700);
+  background: var(--bg-mint-soft);
+  color: var(--green-900);
+}
+
+.btn-ghost-dark {
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.btn-ghost-dark:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.btn-sm {
+  min-height: 38px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.85rem;
+  border-radius: var(--radius-sm);
+}
+
+/* ==========================================================================
+   ویترین سه‌بعدی صفحه اصلی (Hero 3D Showcase)
+   ========================================================================== */
+.hero-section {
+  position: relative;
+  padding: 2.5rem 0 4rem;
+  background:
+    radial-gradient(circle at 18% 22%, rgba(16, 185, 129, 0.14) 0%, transparent 45%),
+    radial-gradient(circle at 85% 80%, rgba(225, 29, 72, 0.06) 0%, transparent 40%),
+    linear-gradient(180deg, #FFFFFF 0%, #F2FBF7 100%);
+  border-bottom: 1px solid var(--border-green);
+  overflow: hidden;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.08fr 0.92fr;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 1rem;
+  background: var(--bg-mint-soft);
+  border: 1px solid var(--border-green);
+  color: var(--green-800);
+  border-radius: var(--radius-pill);
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+}
+
+.hero-badge-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--coral-600);
+  box-shadow: 0 0 0 4px rgba(225, 29, 72, 0.2);
+}
+
+.hero-title {
+  font-size: clamp(1.85rem, 3.3vw, 2.85rem);
+  font-weight: 700;
+  color: var(--ink-950);
+  margin-bottom: 1.15rem;
+}
+
+.hero-title .highlight-green {
+  color: var(--green-700);
+  position: relative;
+}
+
+.hero-subtitle {
+  font-size: 1.06rem;
+  color: var(--ink-700);
+  margin-bottom: 1.85rem;
+  max-width: 58ch;
+}
+
+.hero-cta-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  margin-bottom: 2.25rem;
+}
+
+.hero-trust-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.trust-metric-card {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1rem;
+}
+
+.trust-metric-val {
+  font-family: 'Vazirmatn', Tahoma, sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--green-800);
+}
+
+.trust-metric-lbl {
+  font-size: 0.82rem;
+  color: var(--ink-600);
+}
+
+/* صحنه سه‌بعدی تعاملی دندان و لبخند */
+.hero-3d-stage {
+  position: relative;
+  background: radial-gradient(circle at 50% 35%, #163844 0%, #09151B 75%);
+  border-radius: var(--radius-xl);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-3d);
+  border: 1px solid rgba(52, 211, 153, 0.28);
+  color: #FFFFFF;
+  min-height: 470px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.stage-top-bar {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.stage-status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: rgba(16, 185, 129, 0.16);
+  border: 1px solid rgba(52, 211, 153, 0.38);
+  color: #A7F3D0;
+  padding: 0.3rem 0.8rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.stage-canvas-wrap {
+  position: relative;
+  width: 100%;
+  height: 330px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#hero-3d-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: grab;
+  position: relative;
+  z-index: 2;
+}
+
+#hero-3d-canvas:active {
+  cursor: grabbing;
+}
+
+/* تصویر جایگزین باکیفیت (Fallback) برای دستگاه‌های ضعیف یا پیش از بارگذاری بوم */
+.hero-3d-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.18;
+  transition: opacity var(--transition-smooth);
+}
+
+.hero-3d-stage.fallback-only .hero-3d-fallback {
+  opacity: 1;
+}
+
+/* برچسب‌های کالبدشکافی سه‌بعدی */
+.stage-annotations {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.stage-annotation-tag {
+  position: absolute;
+  background: rgba(9, 21, 27, 0.84);
+  border: 1px solid rgba(52, 211, 153, 0.45);
+  color: #ECFDF5;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.75rem;
+  font-weight: 700;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.stage-controls-bar {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.mode-switch-group {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.mode-btn {
+  background: transparent;
+  color: #CBD5E1;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 36px;
+  transition: all var(--transition-fast);
+}
+
+.mode-btn:hover {
+  color: #FFFFFF;
+  border-color: var(--green-400);
+}
+
+.mode-btn.active {
+  background: var(--green-600);
+  color: #FFFFFF;
+  border-color: var(--green-400);
+}
+
+/* ==========================================================================
+   بخش‌ها، کارت‌های سه‌بعدی (3D Depth Cards) و شبکه‌ها
+   ========================================================================== */
+.section-block {
+  padding: 4.25rem 0;
+}
+
+.section-block.alt-bg {
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.section-eyebrow {
+  display: inline-block;
+  color: var(--green-800);
+  background: var(--bg-mint-soft);
+  border: 1px solid var(--border-green);
+  padding: 0.25rem 0.8rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.82rem;
+  font-weight: 700;
+  margin-bottom: 0.6rem;
+}
+
+.section-title {
+  font-size: clamp(1.45rem, 2.4vw, 2.05rem);
+  color: var(--ink-950);
+}
+
+.section-desc {
+  color: var(--ink-600);
+  max-width: 58ch;
+  margin-top: 0.45rem;
+}
+
+.cards-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.cards-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.cards-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+
+/* کارت دارای عمق بصری سه‌بعدی و بازتاب نور (Specular Tilt Card) */
+.card-3d {
+  position: relative;
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  padding: 1.6rem;
+  box-shadow: var(--shadow-sm);
+  transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 260ms cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 260ms ease;
+  transform-style: preserve-3d;
+  will-change: transform;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-3d::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    420px circle at var(--mouse-x, 50%) var(--mouse-y, 20%),
+    rgba(16, 185, 129, 0.11),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 250ms ease;
+  pointer-events: none;
+}
+
+.card-3d:hover {
+  border-color: var(--green-500);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-5px);
+}
+
+.card-3d:hover::before {
+  opacity: 1;
+}
+
+.service-3d-thumb {
+  width: 100%;
+  height: 148px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, #0D222B 0%, #133B3A 100%);
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(52, 211, 153, 0.25);
+}
+
+.service-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+  padding-top: 0.9rem;
+  border-top: 1px dashed var(--border-subtle);
+  font-size: 0.86rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.badge-green {
+  background: var(--bg-mint-soft);
+  color: var(--green-800);
+  border: 1px solid var(--border-green);
+}
+
+.badge-coral {
+  background: var(--coral-50);
+  color: var(--coral-700);
+  border: 1px solid #FECDD3;
+}
+
+.badge-amber {
+  background: var(--amber-100);
+  color: var(--amber-700);
+  border: 1px solid #FDE68A;
+}
+
+.badge-slate {
+  background: #F1F5F9;
+  color: var(--ink-700);
+  border: 1px solid var(--border-subtle);
+}
+
+/* ==========================================================================
+   ویزارد ۵ مرحله‌ای رزرو نوبت و تقویم شمسی
+   ========================================================================== */
+.wizard-shell {
+  background: var(--bg-surface);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-md);
+  padding: 2rem;
+}
+
+.wizard-steps-bar {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 2.25rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.wizard-step-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.75rem;
+  border-radius: var(--radius-md);
+  background: var(--bg-page);
+  border: 1px solid var(--border-subtle);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--ink-600);
+}
+
+.wizard-step-item.active {
+  background: var(--bg-mint-soft);
+  border-color: var(--green-600);
+  color: var(--green-900);
+}
+
+.wizard-step-item.completed {
+  background: #F0FDF4;
+  border-color: var(--border-green);
+  color: var(--green-800);
+}
+
+.step-num-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--bg-surface);
+  border: 2px solid currentColor;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.wizard-step-item.active .step-num-circle,
+.wizard-step-item.completed .step-num-circle {
+  background: var(--green-700);
+  border-color: var(--green-700);
+  color: #FFFFFF;
+}
+
+/* تقویم شمسی ۱۴ روزه */
+.jalali-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.65rem;
+  margin-bottom: 1.75rem;
+}
+
+.jalali-day-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 0.5rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  min-height: 82px;
+}
+
+.jalali-day-btn:hover:not(:disabled) {
+  border-color: var(--green-600);
+  background: var(--bg-mint-soft);
+}
+
+.jalali-day-btn.selected {
+  background: var(--green-800);
+  color: #FFFFFF;
+  border-color: var(--green-800);
+  box-shadow: 0 10px 20px -6px rgba(6, 95, 70, 0.45);
+}
+
+.jalali-day-btn.is-holiday {
+  background: var(--coral-50);
+  border-color: #FECDD3;
+  color: var(--coral-700);
+}
+
+.slots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+  gap: 0.75rem;
+}
+
+.slot-chip {
+  padding: 0.75rem 0.65rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  min-height: 68px;
+}
+
+.slot-chip.available:hover {
+  border-color: var(--green-600);
+  background: var(--bg-mint-soft);
+}
+
+.slot-chip.selected {
+  background: var(--green-800);
+  color: #FFFFFF;
+  border-color: var(--green-800);
+  box-shadow: var(--shadow-md);
+}
+
+.slot-chip.booked {
+  background: #F1F5F9;
+  color: var(--ink-600);
+  border-color: #CBD5E1;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.slot-chip.blocked {
+  background: var(--coral-50);
+  color: var(--coral-700);
+  border-color: #FECDD3;
+  cursor: not-allowed;
+}
+
+/* ==========================================================================
+   فرم‌ها، ورودی‌ها و جدول‌ها
+   ========================================================================== */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.15rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.form-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--ink-800);
+}
+
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  min-height: 46px;
+  padding: 0.65rem 0.95rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid #CBD5E1;
+  background: var(--bg-surface);
+  color: var(--ink-900);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.form-textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--green-700);
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.16);
+  outline: none;
+}
+
+.password-field-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-field-wrap .form-input {
+  padding-inline-end: 6.5rem;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  left: 0.5rem;
+  background: var(--bg-page);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--ink-700);
+  min-height: 34px;
+}
+
+/* ==========================================================================
+   داشبورد مراجع و پنل مدیریت صاحب مطب
+   ========================================================================== */
+.portal-layout {
+  display: grid;
+  grid-template-columns: 270px 1fr;
+  gap: 1.75rem;
+  align-items: start;
+}
+
+.portal-sidebar {
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  padding: 1.25rem;
+  position: sticky;
+  top: 94px;
+  box-shadow: var(--shadow-sm);
+}
+
+.portal-nav-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: transparent;
+  color: var(--ink-800);
+  font-weight: 700;
+  cursor: pointer;
+  text-align: right;
+  margin-bottom: 0.35rem;
+  min-height: 46px;
+  transition: all var(--transition-fast);
+}
+
+.portal-nav-btn:hover {
+  background: var(--bg-mint-soft);
+  color: var(--green-800);
+}
+
+.portal-nav-btn.active {
+  background: var(--green-800);
+  color: #FFFFFF;
+}
+
+.stat-cards-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+}
+
+.stat-box {
+  background: var(--bg-surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  padding: 1.15rem 1.25rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.stat-box-num {
+  font-family: 'Vazirmatn', Tahoma, sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--green-800);
+}
+
+.thread-box {
+  background: var(--bg-page);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  padding: 1rem;
+  margin-top: 0.85rem;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.chat-bubble {
+  padding: 0.8rem 1rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 0.65rem;
+  max-width: 88%;
+}
+
+.chat-bubble.patient {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  margin-left: auto;
+}
+
+.chat-bubble.staff {
+  background: var(--bg-mint-soft);
+  border: 1px solid var(--border-green);
+  margin-right: auto;
+}
+
+/* اعلان شناور (Toast) و پنجره مودال */
+.toast-container {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  z-index: 9500;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  max-width: 380px;
+}
+
+.toast-item {
+  background: var(--ink-950);
+  color: #FFFFFF;
+  padding: 0.9rem 1.2rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  border-right: 5px solid var(--green-500);
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.toast-item.error {
+  border-right-color: var(--coral-500);
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(9, 21, 27, 0.72);
+  backdrop-filter: blur(6px);
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+}
+
+.modal-card {
+  background: var(--bg-surface);
+  border-radius: var(--radius-xl);
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 2rem;
+  box-shadow: var(--shadow-3d);
+  border: 1px solid var(--border-green);
+}
+
+/* فوتر */
+.site-footer {
+  margin-top: auto;
+  background: var(--bg-dark-stage);
+  color: #E2E8F0;
+  padding: 3.5rem 0 2rem;
+  border-top: 1px solid rgba(52, 211, 153, 0.25);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.footer-title {
+  color: #FFFFFF;
+  font-size: 1.05rem;
+  margin-bottom: 1rem;
+}
+
+.footer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.footer-links button, .footer-links a {
+  background: transparent;
+  border: none;
+  color: #CBD5E1;
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-align: right;
+}
+
+.footer-links button:hover, .footer-links a:hover {
+  color: var(--green-400);
+}
+
+/* واکنش‌گرایی کامل برای تبلت و موبایل */
+@media (max-width: 1024px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+  .cards-grid-3, .cards-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .portal-layout {
+    grid-template-columns: 1fr;
+  }
+  .portal-sidebar {
+    position: static;
+    display: flex;
+    overflow-x: auto;
+    gap: 0.5rem;
+    padding: 0.75rem;
+  }
+  .portal-nav-btn {
+    width: auto;
+    white-space: nowrap;
+    margin-bottom: 0;
+  }
+  .wizard-steps-bar {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .header-actions > .btn-primary { display: none; }
+  .brand-subtitle {
+    display: none;
+  }
+  .brand-title {
+    font-size: 0.98rem;
+  }
+  .brand-emblem {
+    width: 38px;
+    height: 38px;
+  }
+  .header-actions {
+    gap: 0.35rem;
+  }
+  .header-actions .btn-sm {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.76rem;
+    min-height: 38px;
+  }
+  .mobile-menu-btn {
+    display: inline-flex;
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+  }
+  .main-nav {
+    display: none;
+    position: absolute;
+    top: 76px;
+    right: 0;
+    left: 0;
+    background: var(--bg-surface);
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-lg);
+  }
+  .main-nav.open {
+    display: flex;
+  }
+  .cards-grid-3, .cards-grid-2, .cards-grid-4, .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero-trust-metrics {
+    grid-template-columns: 1fr;
+  }
+  .jalali-calendar-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .wizard-steps-bar {
+    grid-template-columns: 1fr;
+  }
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+  .wizard-shell {
+    padding: 1.2rem;
+  }
+}
+
+/* Let long actions and account controls fit narrow screens. */
+@media (max-width: 640px) {
+  .btn {
+    min-width: 0;
+    max-inline-size: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .card-3d:has([data-action="auth-switch-tab"]) {
+    min-width: 0;
+    padding: 1.25rem !important;
+  }
+
+  .card-3d div:has(> button[data-action="auth-switch-tab"]) {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  .card-3d div:has(> button[data-action="quick-demo-login"]) {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .card-3d button[data-action="auth-switch-tab"],
+  .card-3d button[data-action="quick-demo-login"] {
+    min-width: 0;
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .card-3d button[data-action="auth-switch-tab"] {
+    padding-inline: 0.35rem;
+  }
+}
+
+/* رعایت تنظیم کاهش حرکت سیستم (prefers-reduced-motion) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+/* ==========================================================================
+   الگوهای Immersive Web Design، 21st.dev، ReactBits و UI/UX Pro Max
+   ========================================================================== */
+
+/* نوار پرتو پیشرفت اسکرول (21st.dev Scroll Progress Beam) */
+.scroll-progress-beam {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 4px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--coral-500) 0%, var(--green-400) 50%, var(--green-700) 100%);
+  z-index: 9999;
+  box-shadow: 0 0 14px rgba(16, 185, 129, 0.65);
+  transition: width 60ms linear;
+}
+
+/* بنر اختصاصی صفحات چندصفحه‌ای (Multi-Page Hero Breadcrumb Banner) */
+.page-hero-banner {
+  background:
+    radial-gradient(circle at 20% 30%, rgba(16, 185, 129, 0.16) 0%, transparent 50%),
+    linear-gradient(135deg, #09151B 0%, #0F292F 100%);
+  color: #FFFFFF;
+  padding: 2.75rem 0 2.5rem;
+  border-bottom: 1px solid rgba(52, 211, 153, 0.28);
+}
+
+.breadcrumb-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.84rem;
+  color: #A7F3D0;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(52, 211, 153, 0.25);
+  margin-bottom: 1rem;
+}
+
+.breadcrumb-nav a {
+  color: #FFFFFF;
+  font-weight: 700;
+}
+
+.breadcrumb-nav a:hover {
+  color: var(--green-400);
+}
+
+/* چیدمان Bento Grid مدرن (UI/UX Pro Max Variance 8) */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.35rem;
+}
+
+.bento-span-8 {
+  grid-column: span 8;
+}
+
+.bento-span-4 {
+  grid-column: span 4;
+}
+
+.bento-span-6 {
+  grid-column: span 6;
+}
+
+.bento-card {
+  position: relative;
+  background: var(--bg-surface);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-subtle);
+  padding: 1.85rem;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: transform var(--transition-smooth), border-color var(--transition-smooth), box-shadow var(--transition-smooth);
+}
+
+.bento-card:hover {
+  border-color: var(--green-500);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+
+.bento-card.dark-glass {
+  background: linear-gradient(145deg, #09151B 0%, #122B34 100%);
+  color: #FFFFFF;
+  border-color: rgba(52, 211, 153, 0.32);
+}
+
+/* بخش داستان‌سرایی اسکرول‌محور سه‌بعدی با GSAP ScrollTrigger */
+.immersive-story-section {
+  background: linear-gradient(180deg, #071116 0%, #0C1F27 100%);
+  color: #FFFFFF;
+  padding: 4.5rem 0;
+  border-top: 1px solid rgba(52, 211, 153, 0.25);
+  border-bottom: 1px solid rgba(52, 211, 153, 0.25);
+}
+
+.story-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+.story-sticky-stage {
+  position: sticky;
+  top: 98px;
+  background: radial-gradient(circle at 50% 40%, #173F49 0%, #081318 78%);
+  border: 1px solid rgba(52, 211, 153, 0.35);
+  border-radius: var(--radius-xl);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-3d);
+}
+
+.story-chapter-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  margin-bottom: 1.5rem;
+  transition: all var(--transition-smooth);
+}
+
+.story-chapter-card.active-chapter {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: var(--green-400);
+  box-shadow: 0 16px 36px -10px rgba(16, 185, 129, 0.28);
+  transform: translateX(-6px);
+}
+
+/* اسلایدر تعاملی قبل و بعد اصلاح طرح لبخند (21st.dev Compare Component) */
+.smile-compare-wrap {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border-green);
+  background: #0C1F27;
+  user-select: none;
+}
+
+.smile-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.smile-before-layer {
+  background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+  color: #CBD5E1;
+}
+
+.smile-after-layer {
+  background: linear-gradient(135deg, #064E3B 0%, #047857 100%);
+  color: #FFFFFF;
+  clip-path: inset(0 0 0 50%);
+}
+
+.smile-divider-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 3px;
+  background: #FFFFFF;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
+
+.smile-range-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: ew-resize;
+  z-index: 5;
+}
+
+/* نوار ویژگی‌های کلینیکال (ReactBits Ribbon) */
+.clinical-ribbon {
+  background: var(--ink-950);
+  color: #A7F3D0;
+  padding: 0.85rem 0;
+  border-top: 1px solid rgba(52, 211, 153, 0.2);
+  border-bottom: 1px solid rgba(52, 211, 153, 0.2);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.clinical-ribbon-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+@media (max-width: 1024px) {
+  .bento-span-8, .bento-span-4, .bento-span-6 {
+    grid-column: span 12;
+  }
+  .story-grid {
+    grid-template-columns: 1fr;
+  }
+  .story-sticky-stage {
+    position: static;
+  }
+}

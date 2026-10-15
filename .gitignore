@@ -1,0 +1,36 @@
+# Runtime data stays local. Keep the empty data directory in source control.
+data/*
+!data/.gitkeep
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+*.sqlite-*
+*.sqlite3-*
+
+# Python / Node tooling
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+node_modules/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local credentials, diagnostics and editor files
+.env
+.env.*
+!.env.example
+*.log
+logs/
+*.bak
+*.backup
+backups/
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Generated test output
+tests/frontend-regression-results.json
